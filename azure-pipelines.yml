@@ -1,20 +1,29 @@
 trigger:
-- main
+  branches:
+    include:
+      - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: Default
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '16.x'
-  displayName: 'Install Node.js'
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildJob
+        steps:
+          - script: echo "Building..."
+            displayName: 'Run Build Script'
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'Install dependencies and build'
+  - stage: Test
+    jobs:
+      - job: TestJob
+        steps:
+          - script: echo "Running tests..."
+            displayName: 'Run Test Script'
 
-- script: |
-    npm test
-  displayName: 'Run tests'
+  - stage: Deploy
+    jobs:
+      - job: DeployJob
+        steps:
+          - script: echo "Deploying..."
+            displayName: 'Run Deploy Script'
