@@ -14,16 +14,23 @@ stages:
           - script: echo "Building..."
             displayName: 'Run Build Script'
 
+          - script: echo "Resultado de compilación" > build_output.txt
+            displayName: 'Generar archivo de salida'
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.SourcesDirectory)/build_output.txt'
+              ArtifactName: 'BuildOutput'
+              publishLocation: 'Container'
+
   - stage: Test
     jobs:
       - job: TestJob
         steps:
-          - script: echo "Running tests..."
-            displayName: 'Run Test Script'
+          - template: templates/common-steps.yml
 
   - stage: Deploy
     jobs:
       - job: DeployJob
         steps:
-          - script: echo "Deploying..."
-            displayName: 'Run Deploy Script'
+          - template: templates/deploy-steps.yml
