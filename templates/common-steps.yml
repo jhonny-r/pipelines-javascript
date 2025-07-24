@@ -1,3 +1,3 @@
 steps:
   - script: echo "Ejecutando pruebas..."
-    displayName: "Pruebas comunes
+    displayName: "Pruebas comunes"
