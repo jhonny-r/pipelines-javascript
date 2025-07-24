@@ -1,0 +1,36 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  name: Default
+
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildJob
+        steps:
+          - script: echo "Building..."
+            displayName: 'Run Build Script'
+
+          - script: echo "Resultado de compilación" > build_output.txt
+            displayName: 'Generar archivo de salida'
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.SourcesDirectory)/build_output.txt'
+              ArtifactName: 'BuildOutput'
+              publishLocation: 'Container'
+
+  - stage: Test
+    jobs:
+      - job: TestJob
+        steps:
+          - template: templates/common-steps.yml
+
+  - stage: Deploy
+    jobs:
+      - job: DeployJob
+        steps:
+          - template: templates/deploy-steps.yml
